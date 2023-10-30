@@ -8,7 +8,7 @@ description = "A Simple Vector library"
 readme = "README.md"
 homepage = "https://github.com/Cubidev3/cubi-vectors"
 repository = "https://github.com/Cubidev3/cubi-vectors"
-keywords = ["math", "vector", "2D", "3D", "gamedev", "api"]
+keywords = ["math", "vector", "2D", "3D", "gamedev"]
 categories = ["api", "game-development"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

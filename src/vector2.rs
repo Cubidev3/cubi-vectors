@@ -83,11 +83,11 @@ impl Vector2 {
     }
 
     pub fn rejection_from(&self, other: &Vector2) -> Vector2 {
-        self - &self.projected_onto(&other)
+        self - self.projected_onto(&other)
     }
 
     pub fn rejection_of(&self, other: &Vector2) -> Vector2 {
-        other - &other.projected_onto(&self)
+        other - other.projected_onto(&self)
     }
     
     pub fn xyz(&self, z: f32) -> Vector3 {
@@ -103,6 +103,11 @@ impl Vector2 {
     }
 }
 
+impl Default for Vector2 {
+    fn default() -> Vector2 {
+        ZERO
+    }
+}
 impl Add for Vector2 {
     type Output = Vector2;
 
@@ -118,6 +123,29 @@ impl Add for &Vector2 {
     type Output = Vector2;
 
     fn add(self, other: &Vector2) -> Vector2 {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y
+        }
+    }
+}
+
+
+impl Add<&Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: &Vector2) -> Vector2 {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y
+        }
+    }
+}
+
+impl Add<Vector2> for &Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: Vector2) -> Vector2 {
         Vector2 {
             x: self.x + other.x,
             y: self.y + other.y
@@ -154,6 +182,28 @@ impl Sub for &Vector2 {
     type Output = Vector2;
 
     fn sub(self, other: &Vector2) -> Vector2 {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y
+        }
+    }
+}
+
+impl Sub<&Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: &Vector2) -> Vector2 {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y
+        }
+    }
+}
+
+impl Sub<Vector2> for &Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: Vector2) -> Vector2 {
         Vector2 {
             x: self.x - other.x,
             y: self.y - other.y

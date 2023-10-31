@@ -89,6 +89,10 @@ impl Vector2 {
     pub fn rejection_of(&self, other: &Vector2) -> Vector2 {
         other - other.projected_onto(&self)
     }
+
+    pub fn is_almost_zero(&self) -> bool {
+        self.len_squared() <= f32::EPSILON * f32::EPSILON
+    }
     
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }

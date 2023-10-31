@@ -1,3 +1,4 @@
+use std::f32::EPSILON;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use crate::vector2::Vector2;
@@ -123,6 +124,10 @@ impl Vector3 {
         }
 
         cross
+    }
+
+    pub fn is_almost_zero(&self) -> bool {
+        self.len_squared() <= f32::EPSILON * f32::EPSILON
     }
     
     pub fn xy(&self) -> Vector2 {

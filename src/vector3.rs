@@ -1,4 +1,3 @@
-use std::f32::EPSILON;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use crate::vector2::Vector2;

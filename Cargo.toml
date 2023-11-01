@@ -1,15 +1,15 @@
 [package]
 name = "cubi_vectors"
 authors = ["cubidev"]
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 license = "MIT"
 description = "A Simple Vector library"
 readme = "README.md"
 homepage = "https://github.com/Cubidev3/cubi-vectors"
 repository = "https://github.com/Cubidev3/cubi-vectors"
-keywords = ["math", "vector", "2D", "3D", "gamedev"]
-categories = ["api", "game-development"]
+keywords = ["math", "vector", "two_dimensions", "three_dimensions", "gamedev"]
+categories = ["game-development"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

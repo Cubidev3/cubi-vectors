@@ -93,6 +93,13 @@ impl Vector2 {
     pub fn is_almost_zero(&self) -> bool {
         self.len_squared() <= f32::EPSILON * f32::EPSILON
     }
+
+    pub fn rotated_by(&self, rotation_radians: f32) -> Vector2 {
+        Vector2 {
+            x: self.x * rotation_radians.cos() - self.y * rotation_radians.sin(),
+            y: self.x * rotation_radians.sin() + self.y * rotation_radians.cos()
+        }
+    }
     
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }

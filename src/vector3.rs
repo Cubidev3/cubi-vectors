@@ -55,6 +55,30 @@ impl Vector3 {
         Vector3 { x, y, z }
     }
 
+    pub fn from_xy(xy: Vector2, z: f32) -> Vector3 {
+        Vector3 {
+            x: xy.x,
+            y: xy.y,
+            z
+        }
+    }
+
+    pub fn from_xz(xz: Vector2, y: f32) -> Vector3 {
+        Vector3 {
+            x: xz.x,
+            y,
+            z: xz.y
+        }
+    }
+
+    pub fn from_yz(yz: Vector2, x: f32) -> Vector3 {
+        Vector3 {
+            x,
+            y: yz.x,
+            z: yz.y
+        }
+    }
+
     pub fn len(&self) -> f32 {
         self.len_squared().sqrt()
     }
@@ -123,6 +147,18 @@ impl Vector3 {
         }
 
         cross
+    }
+
+    pub fn rotated_around_x_by(&self, rotation_radians: f32) -> Vector3 {
+        Vector3::from_yz(self.yz().rotated_by(rotation_radians), self.x)
+    }
+
+    pub fn rotated_around_y_by(&self, rotation_radians: f32) -> Vector3 {
+        Vector3::from_xz(self.xz().rotated_by(rotation_radians), self.y)
+    }
+
+    pub fn rotated_around_z_by(&self, rotation_radians: f32) -> Vector3 {
+        Vector3::from_xy(self.xy().rotated_by(rotation_radians), self.z)
     }
 
     pub fn is_almost_zero(&self) -> bool {

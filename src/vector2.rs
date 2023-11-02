@@ -100,7 +100,15 @@ impl Vector2 {
             y: self.x * rotation_radians.sin() + self.y * rotation_radians.cos()
         }
     }
-    
+
+    pub fn abs(&self) -> Vector2 {
+        Vector2 { x: self.x.abs(), y: self.y.abs() }
+    }
+
+    pub fn sign(&self) -> Vector2 {
+        Vector2 { x: self.x.signum(), y: self.y.signum() }
+    }
+
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }
     }

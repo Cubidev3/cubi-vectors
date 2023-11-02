@@ -161,6 +161,14 @@ impl Vector3 {
         Vector3::from_xy(self.xy().rotated_by(rotation_radians), self.z)
     }
 
+    pub fn abs(&self) -> Vector3 {
+        Vector3 { x: self.x.abs(), y: self.y.abs(), z: self.z.abs() }
+    }
+
+    pub fn sign(&self) -> Vector3 {
+        Vector3 { x: self.x.signum(), y: self.y.signum(), z: self.z.signum() }
+    }
+
     pub fn is_almost_zero(&self) -> bool {
         self.len_squared() <= f32::EPSILON * f32::EPSILON
     }

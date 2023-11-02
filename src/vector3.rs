@@ -169,6 +169,14 @@ impl Vector3 {
         Vector3 { x: self.x.signum(), y: self.y.signum(), z: self.z.signum() }
     }
 
+    pub fn element_wise_product(&self, other: &Vector3) -> Vector3 {
+        Vector3 { x: self.x * other.x, y: self.y * other.y, z: self.z * other.z }
+    }
+
+    pub fn with_sign_of(&self, other: &Vector3) -> Vector3 {
+        Vector3 { x: self.x.abs() * other.x.signum(), y: self.y.abs() * other.y.signum(), z: self.z.abs() * other.z.signum()}
+    }
+
     pub fn is_almost_zero(&self) -> bool {
         self.len_squared() <= f32::EPSILON * f32::EPSILON
     }

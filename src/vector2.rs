@@ -109,6 +109,14 @@ impl Vector2 {
         Vector2 { x: self.x.signum(), y: self.y.signum() }
     }
 
+    pub fn element_wise_product(&self, other: &Vector2) -> Vector2 {
+        Vector2 { x: self.x * other.x, y: self.y * other.y }
+    }
+
+    pub fn with_sign_of(&self, other: &Vector2) -> Vector2 {
+        Vector2 { x: self.x.abs() * other.x.signum(), y: self.y.abs() * other.y.signum() }
+    }
+
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }
     }

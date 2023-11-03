@@ -192,6 +192,30 @@ impl Vector3 {
     pub fn is_z_inside_interval(&self, min: f32, max: f32) -> bool {
         min <= self.z && self.z <= max
     }
+
+    pub fn flipped_x(&self) -> Vector3 {
+        Vector3 { x: -self.x, y: self.y, z: self.z }
+    }
+
+    pub fn flipped_y(&self) -> Vector3 {
+        Vector3 { x: self.x, y: -self.y, z: self.z }
+    }
+
+    pub fn flipped_z(&self) -> Vector3 {
+        Vector3 { x: self.x, y: self.y, z: -self.z }
+    }
+
+    pub fn flipped_xy(&self) -> Vector3 {
+        Vector3 { x: -self.x, y: -self.y, z: self.z }
+    }
+
+    pub fn flipped_xz(&self) -> Vector3 {
+        Vector3 { x: -self.x, y: self.y, z: -self.z }
+    }
+
+    pub fn flipped_yz(&self) -> Vector3 {
+        Vector3 { x: self.x, y: -self.y, z: -self.z }
+    }
     
     pub fn xy(&self) -> Vector2 {
         Vector2 { x: self.x, y: self.y }

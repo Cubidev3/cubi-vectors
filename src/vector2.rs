@@ -125,6 +125,14 @@ impl Vector2 {
         min <= self.y && self.y <= max
     }
 
+    pub fn flipped_x(&self) -> Vector2 {
+        Vector2 { x: -self.x, y: self.y }
+    }
+
+    pub fn flipped_y(&self) -> Vector2 {
+        Vector2 { x: self.x, y: -self.y }
+    }
+
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }
     }

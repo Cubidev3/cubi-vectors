@@ -180,6 +180,18 @@ impl Vector3 {
     pub fn is_almost_zero(&self) -> bool {
         self.len_squared() <= f32::EPSILON * f32::EPSILON
     }
+
+    pub fn x_is_inside_interval(&self, min: f32, max: f32) -> bool {
+        min <= self.x && self.x <= max
+    }
+
+    pub fn y_is_inside_interval(&self, min: f32, max: f32) -> bool {
+        min <= self.y && self.y <= max
+    }
+
+    pub fn z_is_inside_interval(&self, min: f32, max: f32) -> bool {
+        min <= self.z && self.z <= max
+    }
     
     pub fn xy(&self) -> Vector2 {
         Vector2 { x: self.x, y: self.y }

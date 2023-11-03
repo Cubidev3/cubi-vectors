@@ -117,6 +117,14 @@ impl Vector2 {
         Vector2 { x: self.x.abs() * other.x.signum(), y: self.y.abs() * other.y.signum() }
     }
 
+    pub fn x_is_inside_interval(&self, min: f32, max: f32) -> bool {
+        min <= self.x && self.x <= max
+    }
+
+    pub fn y_is_inside_interval(&self, min: f32, max: f32) -> bool {
+        min <= self.y && self.y <= max
+    }
+
     pub fn xyz(&self, z: f32) -> Vector3 {
         Vector3 { x: self.x, y: self.y, z }
     }

@@ -181,15 +181,15 @@ impl Vector3 {
         self.len_squared() <= f32::EPSILON * f32::EPSILON
     }
 
-    pub fn x_is_inside_interval(&self, min: f32, max: f32) -> bool {
+    pub fn is_x_inside_interval(&self, min: f32, max: f32) -> bool {
         min <= self.x && self.x <= max
     }
 
-    pub fn y_is_inside_interval(&self, min: f32, max: f32) -> bool {
+    pub fn is_y_inside_interval(&self, min: f32, max: f32) -> bool {
         min <= self.y && self.y <= max
     }
 
-    pub fn z_is_inside_interval(&self, min: f32, max: f32) -> bool {
+    pub fn is_z_inside_interval(&self, min: f32, max: f32) -> bool {
         min <= self.z && self.z <= max
     }
     

@@ -1,58 +1,59 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use mint::IntoMint;
 
 use crate::vector2::Vector2;
+use crate::vector_base;
 
-pub const ZERO: Vector3 = Vector3 {
-    x: 0.,
-    y: 0.,
-    z: 0.,
-};
-pub const IDENTITY: Vector3 = Vector3 {
-    x: 1.,
-    y: 1.,
-    z: 1.,
-};
-pub const RIGHT: Vector3 = Vector3 {
-    x: 1.,
-    y: 0.,
-    z: 0.,
-};
-pub const LEFT: Vector3 = Vector3 {
-    x: -1.,
-    y: 0.,
-    z: 0.,
-};
-pub const UP: Vector3 = Vector3 {
-    x: 0.,
-    y: 1.,
-    z: 0.,
-};
-pub const DOWN: Vector3 = Vector3 {
-    x: 0.,
-    y: -1.,
-    z: 0.,
-};
-pub const FORWARD: Vector3 = Vector3 {
-    x: 0.,
-    y: 0.,
-    z: 1.,
-};
-pub const BACKWARD: Vector3 = Vector3 {
-    x: 0.,
-    y: 0.,
-    z: 1.,
-};
-
-#[derive(PartialEq, Debug, Clone, Copy)]
-pub struct Vector3 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-}
+vector_base!(Vector3<f32> {x,y,z});
 
 impl Vector3 {
-    pub fn xyz(x: f32, y: f32, z: f32) -> Vector3 {
+    pub const ZERO: Vector3 = Vector3 {
+        x: 0.,
+        y: 0.,
+        z: 0.,
+    };
+    pub const IDENTITY: Vector3 = Vector3 {
+        x: 1.,
+        y: 1.,
+        z: 1.,
+    };
+    pub const RIGHT: Vector3 = Vector3 {
+        x: 1.,
+        y: 0.,
+        z: 0.,
+    };
+    pub const LEFT: Vector3 = Vector3 {
+        x: -1.,
+        y: 0.,
+        z: 0.,
+    };
+    pub const UP: Vector3 = Vector3 {
+        x: 0.,
+        y: 1.,
+        z: 0.,
+    };
+    pub const DOWN: Vector3 = Vector3 {
+        x: 0.,
+        y: -1.,
+        z: 0.,
+    };
+    pub const FORWARD: Vector3 = Vector3 {
+        x: 0.,
+        y: 0.,
+        z: 1.,
+    };
+    pub const BACKWARD: Vector3 = Vector3 {
+        x: 0.,
+        y: 0.,
+        z: 1.,
+    };
+
+    pub fn from_xyz(x: f32, y: f32, z: f32) -> Vector3 {
         Vector3 { x, y, z }
+    }
+
+    pub fn from_value(value: f32) -> Vector3 {
+        Vector3 { x: value, y: value, z: value }
     }
 
     pub fn from_xy(xy: Vector2, z: f32) -> Vector3 {
@@ -88,50 +89,50 @@ impl Vector3 {
     }
     
     pub fn normalized(&self) -> Option<Vector3> {
-        if self.len_squared() == 0. {
+        if self.len_squared() == 0.0 {
             return None;
         }
         
-        Some(self / self.len())
+        Some(*self / self.len())
     }
     
     pub fn normalized_or_zero(&self) -> Vector3 {
-        self.normalized().unwrap_or(ZERO)
+        self.normalized().unwrap_or(Vector3::ZERO)
     }
 
-    pub fn dot(&self, other: &Vector3) -> f32 {
+    pub fn dot(&self, other: Vector3) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 
-    pub fn angle_between(&self, other: &Vector3) -> f32 {
-        self.cos_between(&other).acos()
+    pub fn angle_between(&self, other: Vector3) -> f32 {
+        self.cos_between(other).acos()
     }
 
-    pub fn cos_between(&self, other: &Vector3) -> f32 {
-        self.dot(&other) / self.len() / other.len()
+    pub fn cos_between(&self, other: Vector3) -> f32 {
+        self.dot(other) / self.len() / other.len()
     }
 
-    pub fn sin_between(&self, other: &Vector3) -> f32 {
-        self.cross(&other).len() / self.len() / other.len()
+    pub fn sin_between(&self, other: Vector3) -> f32 {
+        self.cross(other).len() / self.len() / other.len()
     }
 
-    pub fn projected_onto(&self, other: &Vector3) -> Vector3 {
-        other * (other.dot(&self) / other.len_squared())
+    pub fn projected_onto(&self, other: Vector3) -> Vector3 {
+        other * (other.dot(*self) / other.len_squared())
     }
 
-    pub fn projection_of(&self, other: &Vector3) -> Vector3 {
-        self * (self.dot(&other) / self.len_squared())
+    pub fn projection_of(&self, other: Vector3) -> Vector3 {
+        *self * (self.dot(other) / self.len_squared())
     }
 
-    pub fn rejection_from(&self, other: &Vector3) -> Vector3 {
-        self - self.projected_onto(&other)
+    pub fn rejection_from(&self, other: Vector3) -> Vector3 {
+        *self - self.projected_onto(other)
     }
 
-    pub fn rejection_of(&self, other: &Vector3) -> Vector3 {
-        other - other.projected_onto(&self)
+    pub fn rejection_of(&self, other: Vector3) -> Vector3 {
+        other - other.projected_onto(*self)
     }
 
-    pub fn cross(&self, other: &Vector3) -> Vector3 {
+    pub fn cross(&self, other: Vector3) -> Vector3 {
         Vector3 {
             x: self.y * other.z - self.z * other.y,
             y: self.z * other.x - self.x * other.z,
@@ -139,10 +140,10 @@ impl Vector3 {
         }
     }
 
-    pub fn cross_in_direction_of(&self, other: &Vector3, direction: &Vector3) -> Vector3 {
-        let cross = self.cross(&other);
+    pub fn cross_in_direction_of(&self, other: Vector3, direction: Vector3) -> Vector3 {
+        let cross = self.cross(other);
 
-        if direction.dot(&cross).is_sign_negative() {
+        if direction.dot(cross).is_sign_negative() {
             return -cross;
         }
 
@@ -169,11 +170,11 @@ impl Vector3 {
         Vector3 { x: self.x.signum(), y: self.y.signum(), z: self.z.signum() }
     }
 
-    pub fn element_wise_product(&self, other: &Vector3) -> Vector3 {
+    pub fn element_wise_product(&self, other: Vector3) -> Vector3 {
         Vector3 { x: self.x * other.x, y: self.y * other.y, z: self.z * other.z }
     }
 
-    pub fn with_sign_of(&self, other: &Vector3) -> Vector3 {
+    pub fn with_sign_of(&self, other: Vector3) -> Vector3 {
         Vector3 { x: self.x.abs() * other.x.signum(), y: self.y.abs() * other.y.signum(), z: self.z.abs() * other.z.signum()}
     }
 
@@ -244,334 +245,7 @@ impl Vector3 {
 
 impl Default for Vector3 {
     fn default() -> Vector3 {
-        ZERO
-    }
-}
-impl Add for Vector3 {
-    type Output = Vector3;
-
-    fn add(self, other: Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl Add<&Vector3> for Vector3 {
-    type Output = Vector3;
-
-    fn add(self, other: &Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl Add for &Vector3 {
-    type Output = Vector3;
-
-    fn add(self, other: &Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl Add<Vector3> for &Vector3 {
-    type Output = Vector3;
-
-    fn add(self, other: Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl AddAssign for Vector3 {
-    fn add_assign(&mut self, other: Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-impl AddAssign<&Vector3> for Vector3 {
-    fn add_assign(&mut self, other: &Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-impl Sub for Vector3 {
-    type Output = Vector3;
-
-    fn sub(self, other: Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl Sub for &Vector3 {
-    type Output = Vector3;
-
-    fn sub(self, other: &Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl Sub<&Vector3> for Vector3 {
-    type Output = Vector3;
-
-    fn sub(self, other: &Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl Sub<Vector3> for &Vector3 {
-    type Output = Vector3;
-
-    fn sub(self, other: Vector3) -> Vector3 {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl SubAssign for Vector3 {
-    fn sub_assign(&mut self, other: Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
-impl SubAssign<&Vector3> for Vector3 {
-    fn sub_assign(&mut self, other: &Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
-impl Mul<f32> for Vector3 {
-    type Output = Vector3;
-
-    fn mul(self, scalar: f32) -> Vector3 {
-        Vector3 {
-            x: self.x * scalar,
-            y: self.y * scalar,
-            z: self.z * scalar,
-        }
-    }
-}
-
-impl Mul<f32> for &Vector3 {
-    type Output = Vector3;
-
-    fn mul(self, scalar: f32) -> Vector3 {
-        Vector3 {
-            x: self.x * scalar,
-            y: self.y * scalar,
-            z: self.z * scalar,
-        }
-    }
-}
-
-impl Mul<&f32> for Vector3 {
-    type Output = Vector3;
-
-    fn mul(self, scalar: &f32) -> Vector3 {
-        Vector3 {
-            x: self.x * scalar,
-            y: self.y * scalar,
-            z: self.z * scalar,
-        }
-    }
-}
-
-impl Mul<&f32> for &Vector3 {
-    type Output = Vector3;
-
-    fn mul(self, scalar: &f32) -> Vector3 {
-        Vector3 {
-            x: self.x * scalar,
-            y: self.y * scalar,
-            z: self.z * scalar,
-        }
-    }
-}
-
-impl Mul<Vector3> for f32 {
-    type Output = Vector3;
-
-    fn mul(self, vector: Vector3) -> Vector3 {
-        Vector3 {
-            x: vector.x * self,
-            y: vector.y * self,
-            z: vector.z * self,
-        }
-    }
-}
-
-impl Mul<&Vector3> for f32 {
-    type Output = Vector3;
-
-    fn mul(self, vector: &Vector3) -> Vector3 {
-        Vector3 {
-            x: vector.x * self,
-            y: vector.y * self,
-            z: vector.z * self,
-        }
-    }
-}
-
-impl Mul<Vector3> for &f32 {
-    type Output = Vector3;
-
-    fn mul(self, vector: Vector3) -> Vector3 {
-        Vector3 {
-            x: vector.x * self,
-            y: vector.y * self,
-            z: vector.z * self,
-        }
-    }
-}
-
-impl Mul<&Vector3> for &f32 {
-    type Output = Vector3;
-
-    fn mul(self, vector: &Vector3) -> Vector3 {
-        Vector3 {
-            x: vector.x * self,
-            y: vector.y * self,
-            z: vector.z * self,
-        }
-    }
-}
-
-impl MulAssign<f32> for Vector3 {
-    fn mul_assign(&mut self, scalar: f32) {
-        self.x *= scalar;
-        self.y *= scalar;
-        self.z *= scalar;
-    }
-}
-
-impl MulAssign<&f32> for Vector3 {
-    fn mul_assign(&mut self, scalar: &f32) {
-        self.x *= scalar;
-        self.y *= scalar;
-        self.z *= scalar;
-    }
-}
-
-impl Div<f32> for Vector3 {
-    type Output = Vector3;
-
-    fn div(self, scalar: f32) -> Vector3 {
-        Vector3 {
-            x: self.x / scalar,
-            y: self.y / scalar,
-            z: self.z / scalar,
-        }
-    }
-}
-
-impl Div<f32> for &Vector3 {
-    type Output = Vector3;
-
-    fn div(self, scalar: f32) -> Vector3 {
-        Vector3 {
-            x: self.x / scalar,
-            y: self.y / scalar,
-            z: self.z / scalar,
-        }
-    }
-}
-
-impl Div<&f32> for Vector3 {
-    type Output = Vector3;
-
-    fn div(self, scalar: &f32) -> Vector3 {
-        Vector3 {
-            x: self.x / scalar,
-            y: self.y / scalar,
-            z: self.z / scalar,
-        }
-    }
-}
-
-impl Div<&f32> for &Vector3 {
-    type Output = Vector3;
-
-    fn div(self, scalar: &f32) -> Vector3 {
-        Vector3 {
-            x: self.x / scalar,
-            y: self.y / scalar,
-            z: self.z / scalar,
-        }
-    }
-}
-
-impl DivAssign<f32> for Vector3 {
-    fn div_assign(&mut self, scalar: f32) {
-        self.x /= scalar;
-        self.y /= scalar;
-        self.z /= scalar;
-    }
-}
-
-impl DivAssign<&f32> for Vector3 {
-    fn div_assign(&mut self, scalar: &f32) {
-        self.x /= scalar;
-        self.y /= scalar;
-        self.z /= scalar;
-    }
-}
-
-impl Neg for Vector3 {
-    type Output = Vector3;
-
-    fn neg(self) -> Vector3 {
-        Vector3 {
-            x: -self.x,
-            y: -self.y,
-            z: -self.z,
-        }
-    }
-}
-
-impl Neg for &Vector3 {
-    type Output = Vector3;
-
-    fn neg(self) -> Vector3 {
-        Vector3 {
-            x: -self.x,
-            y: -self.y,
-            z: -self.z,
-        }
+        Vector3::ZERO
     }
 }
 
@@ -585,4 +259,14 @@ impl ToString for &Vector3 {
     fn to_string(&self) -> String {
         format!("({}, {}, {})", self.x, self.y, self.z)
     }
+}
+
+impl Into<mint::Vector3<f32>> for Vector3 {
+    fn into(self) -> mint::Vector3<f32> {
+        mint::Vector3 { x: self.x, y: self.y, z: self.z }
+    }
+}
+
+impl IntoMint for Vector3 {
+    type MintType = mint::Vector3<f32>;
 }

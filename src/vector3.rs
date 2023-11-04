@@ -270,3 +270,9 @@ impl Into<mint::Vector3<f32>> for Vector3 {
 impl IntoMint for Vector3 {
     type MintType = mint::Vector3<f32>;
 }
+
+impl Into<Vector3> for mint::Vector3<f32> {
+    fn into(self) -> Vector3 {
+        Vector3 { x: self.x, y: self.y, z: self.z }
+    }
+}
